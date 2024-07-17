@@ -1,3 +1,5 @@
+import { expect } from 'expect-webdriverio';
+
 import InventoryPage from '../pages/inventory.page.js';
 import CartPage from '../pages/cart.page.js';
 import HeaderModal from '../pages/header.modal.js';
@@ -17,7 +19,7 @@ describe('Hamburger Menu', () => {
 
   it('Shopping cart icon redirects to the Cart page', async () => {
     await HeaderModal.shoppingCartIcon.waitForAndClick();
-    await expect(browser).toHaveUrlContaining('cart');
+    await expect(browser).toHaveUrl(expect.stringContaining('cart'));
   });
 
   it('"All Items" correctly redirects back to the Products page', async () => {
@@ -25,12 +27,12 @@ describe('Hamburger Menu', () => {
     await HeaderModal.shoppingCartIcon.waitForAndClick();
     await CartPage.waitForPageShown();
     await HeaderModal.clickAllItems();
-    await expect(browser).toHaveUrlContaining('inventory');
+    await expect(browser).toHaveUrl(expect.stringContaining('inventory'));
   });
 
   it('"About" correctly redirects to Sauce Labs homepage', async () => {
     await HeaderModal.clickAbout();
-    await expect(browser).toHaveUrlContaining('saucelabs.com');
+    await expect(browser).toHaveUrl(expect.stringContaining('saucelabs.com'));
   });
 
   it('"Logout" deletes session cookie and redirects to Login page', async () => {

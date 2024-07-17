@@ -1,3 +1,6 @@
+import { expect } from 'expect-webdriverio';
+import { map } from 'async'
+
 import InventoryPage from '../pages/inventory.page.js';
 import HeaderModal from '../pages/header.modal.js';
 import CartPage from '../pages/cart.page.js';
@@ -28,13 +31,11 @@ describe('Checkout', () => {
     await HeaderModal.shoppingCartIcon.click();
     await CartPage.waitForPageShown();
     await CartPage.waitForElements();
-    let cartResults = await Promise.all(
-      (await CartPage.inventoryItems).map(async (element) => await element.getText())
-    );
+    let cartResults = await map(CartPage.inventoryItems, async (element: WebdriverIO.Element) => await element.getText());
     let expectedCartResult = cartResults.find((item) => item === itemName);
     await expect(expectedCartResult).toBeDefined();
     await CartPage.clickRemoveFromCart(itemElementId);
-    cartResults = await Promise.all((await CartPage.inventoryItems).map(async (element) => await element.getText()));
+    cartResults = await map (CartPage.inventoryItems, async (element: WebdriverIO.Element) => await element.getText());
     expectedCartResult = cartResults.find((item) => item === itemName);
     await expect(expectedCartResult).toBeUndefined();
   });
@@ -66,9 +67,9 @@ describe('Checkout', () => {
     const expectedSubtotal = parseFloat(item1.price.replace('$', '')) + parseFloat(item2.price.replace('$', ''));
     const expectedTax = expectedSubtotal * 0.08;
     const expectedTotal = expectedSubtotal + expectedTax;
-    await expect(CheckoutPage.subtotalLabel).toHaveTextContaining(expectedSubtotal.toFixed(2));
-    await expect(CheckoutPage.taxLabel).toHaveTextContaining(expectedTax.toFixed(2));
-    await expect(CheckoutPage.totalLabel).toHaveTextContaining(expectedTotal.toFixed(2));
+    await expect(CheckoutPage.subtotalLabel).toHaveText(expect.stringContaining(expectedSubtotal.toFixed(2)));
+    await expect(CheckoutPage.taxLabel).toHaveText(expect.stringContaining(expectedTax.toFixed(2)));
+    await expect(CheckoutPage.totalLabel).toHaveText(expect.stringContaining(expectedTotal.toFixed(2)));
     await CheckoutPage.finishButton.click();
     await CheckoutPage.completeContainer.waitForDisplayed();
     await expect(CheckoutPage.completePonyImage).toBeDisplayed();

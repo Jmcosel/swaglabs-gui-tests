@@ -1,3 +1,5 @@
+import { expect } from 'expect-webdriverio';
+
 import InventoryPage from '../pages/inventory.page.js';
 import LoginPage from '../pages/login.page.js';
 import Users from '../util/users.js';
@@ -19,7 +21,7 @@ describe('Login/Authentication', () => {
     await LoginPage.errorMsg.waitForDisplayed({
       timeoutMsg: `The login error message never displayed.`
     });
-    await expect(LoginPage.errorMsg).toHaveTextContaining('locked out');
+    await expect(LoginPage.errorMsg).toHaveText(expect.stringContaining('locked out'));
   });
 
   it('Trying to access a page directly without authentication fails', async () => {
@@ -28,6 +30,6 @@ describe('Login/Authentication', () => {
     await LoginPage.errorMsg.waitForDisplayed({
       timeoutMsg: `The login error message never displayed.`
     });
-    await expect(LoginPage.errorMsg).toHaveTextContaining('can only access');
+    await expect(LoginPage.errorMsg).toHaveText(expect.stringContaining('can only access'));
   });
 });

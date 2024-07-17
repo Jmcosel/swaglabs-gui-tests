@@ -10,12 +10,12 @@ The goal of these tests are purely demonstrative of techniques for using WDIO, r
 
 ## Prerequisites
 
-- Google Chrome (last tested with version 116)
-- Node.js (last tested with version LTS 18.17.1)
+- Google Chrome (last tested with version 126)
+- Node.js (last tested with version LTS 20.15.1)
 
 ## How to run tests
 
-1. Clone this repository (`git clone https://github.com/Jmcosel/swaglabs-wdio-gui-tests.git`)
+1. Clone this repository (`git clone https://github.com/Jmelwood/swaglabs-wdio-gui-tests.git`)
 2. Navigate to the root of the folder and install the dependencies (`cd swaglabs-wdio-gui-tests && yarn`)
 3. Run all tests with the following node command: `yarn test`
 4. Append `--spec` followed by the file path for a `.spec.ts` file to just run that file.

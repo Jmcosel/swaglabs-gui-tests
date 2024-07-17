@@ -1,9 +1,11 @@
+import { expect } from 'expect-webdriverio';
+
 import InventoryPage from '../pages/inventory.page.js';
 import ItemPage from '../pages/item.page.js';
 import HeaderModal from '../pages/header.modal.js';
 import LoginPage from '../pages/login.page.js';
 import Users from '../util/users.js';
-import { nameToId, compareSortedArrays } from '../util/misc.js';
+import { nameToId, compareSortedStringArrays, compareSortedNumberArrays } from '../util/misc.js';
 
 describe('Products Page', () => {
   before(async () => {
@@ -20,11 +22,11 @@ describe('Products Page', () => {
     await expect(InventoryPage.inventoryItems).toBeElementsArrayOfSize({ gte: 1 });
     // Check that all images are valid
     for (const element of await InventoryPage.inventoryItemImages) {
-      await expect(element).toHaveAttributeContaining('src', '/static/media/');
+      await expect(element).toHaveAttribute('src', expect.stringContaining('/static/media/'));
       const imageUrl = await element.getAttribute('src');
       const imageName = imageUrl.substring(imageUrl.indexOf('/media/') + 7);
       await browser.newWindow(imageUrl);
-      await expect(browser).toHaveTitleContaining(imageName);
+      await expect(browser).toHaveTitle(expect.stringContaining(imageName));
       await browser.closeWindow();
       await browser.switchToWindow((await browser.getWindowHandles())[0]);
     }
@@ -50,7 +52,7 @@ describe('Products Page', () => {
     await expect(ItemPage.itemName).toHaveText(expectedItemName);
     await expect(ItemPage.itemDescription).toHaveText(expectedItemDescription);
     await expect(ItemPage.itemPrice).toHaveText(expectedItemPrice);
-    await expect(ItemPage.itemImage).toHaveAttributeContaining('src', expectedItemImage);
+    await expect(ItemPage.itemImage).toHaveAttribute('src', expect.stringContaining(expectedItemImage));
   });
 
   it('Adding and removing an item to/from the cart is registered/remembered successfully', async () => {
@@ -65,7 +67,7 @@ describe('Products Page', () => {
     await expect(parseInt(actualShoppingCartSize)).toEqual(parseInt(initialShoppingCartSize) + 1);
     // The text for the item detail's "cart" button should be to "remove", rather than "add"
     await (await InventoryPage.inventoryItemLink(itemName)).click();
-    await expect(ItemPage.removeFromCartButton(itemElementId)).toBeDisplayed();
+    await expect(ItemPage.removeFromCartButton).toBeDisplayed();
     // Return back to inventory page and actully remove it
     await ItemPage.backButton.click();
     await InventoryPage.waitForPageShown();
@@ -77,20 +79,20 @@ describe('Products Page', () => {
     await expect(actualShoppingCartSize).toEqual(initialShoppingCartSize);
     // The text for the item detail's "cart" button should be to "add" once more, rather than "remove"
     await (await InventoryPage.inventoryItemLink(itemName)).click();
-    await expect(ItemPage.addToCartButton(itemElementId)).toBeDisplayed();
+    await expect(ItemPage.addToCartButton).toBeDisplayed();
   });
 
   it('The sort dropdown rearranges the product list as expected', async () => {
     // First check the default, item names (A-Z)
-    await compareSortedArrays(await InventoryPage.inventoryItemNames, (a, b) => (b > a ? -1 : 1));
+    await compareSortedStringArrays(await InventoryPage.inventoryItemNames, (a, b) => (b > a ? -1 : 1));
     // Check item names (Z-A)
     await InventoryPage.sortDropdown.selectByAttribute('value', 'za');
-    await compareSortedArrays(await InventoryPage.inventoryItemNames, (a, b) => (a > b ? -1 : 1));
+    await compareSortedStringArrays(await InventoryPage.inventoryItemNames, (a, b) => (a > b ? -1 : 1));
     // Check item prices (low -> high)
     await InventoryPage.sortDropdown.selectByAttribute('value', 'lohi');
-    await compareSortedArrays(await InventoryPage.inventoryItemPrices, (a, b) => a - b);
+    await compareSortedNumberArrays(await InventoryPage.inventoryItemPrices, (a, b) => a - b);
     // Check item prices (high -> low)
     await InventoryPage.sortDropdown.selectByAttribute('value', 'hilo');
-    await compareSortedArrays(await InventoryPage.inventoryItemPrices, (a, b) => b - a);
+    await compareSortedNumberArrays(await InventoryPage.inventoryItemPrices, (a, b) => b - a);
   });
 });

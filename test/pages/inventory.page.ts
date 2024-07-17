@@ -1,4 +1,5 @@
 import GeneralPage from './general.page.js';
+import { map } from 'async';
 
 class InventoryPage extends GeneralPage {
   constructor() {
@@ -10,7 +11,7 @@ class InventoryPage extends GeneralPage {
   }
 
   get sortDropdown() {
-    return $('select[data-test="product_sort_container"]');
+    return $('select[data-test="product-sort-container"]');
   }
 
   get inventoryItems() {
@@ -55,11 +56,9 @@ class InventoryPage extends GeneralPage {
    * @returns The chosen item's name, description, and price
    */
   async pickItemRandomly() {
-    const itemNames = await Promise.all((await this.inventoryItemNames).map(async (item) => await item.getText()));
-    const itemDescriptions = await Promise.all(
-      (await this.inventoryItemDescriptions).map(async (item) => await item.getText())
-    );
-    const itemPrices = await Promise.all((await this.inventoryItemPrices).map(async (item) => await item.getText()));
+    const itemNames = await map(this.inventoryItemNames, async (item: WebdriverIO.Element) => await item.getText());
+    const itemDescriptions = await map(this.inventoryItemDescriptions, async (item: WebdriverIO.Element) => await item.getText());
+    const itemPrices = await map(this.inventoryItemPrices, async (item: WebdriverIO.Element) => await item.getText());
     const choice = chance.integer({ min: 0, max: itemNames.length - 1 });
     const randomItem = {
       name: itemNames[choice],

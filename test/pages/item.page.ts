@@ -25,28 +25,28 @@ class ItemPage extends GeneralPage {
     return $('img.inventory_details_img');
   }
 
-  async addToCartButton(itemId: string) {
-    return $(`button[data-test="add-to-cart-${itemId}"]`);
+  get addToCartButton() {
+    return $('button[data-test="add-to-cart"]');
   }
 
-  async removeFromCartButton(itemId: string) {
-    return $(`button[data-test="remove-${itemId}"]`);
+  get removeFromCartButton() {
+    return $('button[data-test="remove"]');
   }
 
   /**
    * Adds the specified item name to the shopping cart.
    * @param itemId The item's id
    */
-  async clickAddToCart(itemId: string) {
-    await (await this.addToCartButton(itemId)).waitForAndClick();
+  async clickAddToCart() {
+    await this.addToCartButton.waitForAndClick();
   }
 
   /**
    * Removes the specified item name from the shopping cart.
    * @param itemId The item's id
    */
-  async clickRemoveFromCart(itemId: string) {
-    await (await this.removeFromCartButton(itemId)).waitForAndClick();
+  async clickRemoveFromCart() {
+    await this.removeFromCartButton.waitForAndClick();
   }
 
   async open(itemId: string) {
