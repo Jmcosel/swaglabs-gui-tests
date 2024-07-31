@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --parser-options=ecmaVersion:latest,sourceType:module .",
-    "test": "node --loader ts-node/esm ./node_modules/@wdio/cli/bin/wdio.js wdio.conf.ts"
+    "test": "wdio run wdio.conf.ts"
   },
   "author": "Jeremy Elwood",
   "homepage": "https://github.com/Jmelwood",
