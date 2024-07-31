@@ -4260,6 +4260,11 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
+wdio-ctrf-json-reporter@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/wdio-ctrf-json-reporter/-/wdio-ctrf-json-reporter-0.0.11.tgz#3a686220cc094163ae1120a6215dcce75d300386"
+  integrity sha512-pyYeNbxNt5/oZYdKR+n9HJfcJTrEH4DkuDUaDq5QHLZ+bFr0+FfJvKDWznItSVfPE2GqVswiFaFBUNTfZnLcmQ==
+
 web-streams-polyfill@^3.0.3:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz#71c2718c52b45fd49dbeee88634b3a60ceab42a6"

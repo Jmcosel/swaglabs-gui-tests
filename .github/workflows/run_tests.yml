@@ -30,3 +30,11 @@ jobs:
       
       - name: Run tests
         run: yarn test
+      
+      - name: Prepare test report
+        run: npx ctrf merge reports
+        if: always()
+      
+      - name: Publish test report
+        run: npx github-actions-ctrf reports/ctrf-report.json
+        if: always()
