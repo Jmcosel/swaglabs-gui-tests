@@ -136,7 +136,7 @@ export const config: Options.Testrunner = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['spec'],
+  reporters: process.env.CI == 'true' ? [['ctrf-json', { outputDir: 'reports'}], 'spec'] : ['spec'],
 
   //
   // Options to be passed to Mocha.
